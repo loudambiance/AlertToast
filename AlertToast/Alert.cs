@@ -84,6 +84,7 @@ namespace AlertToast {
         protected override void OnLoad(System.EventArgs e) {
 
             this.Location = calculateLocation();
+            this.TopMost = true;
             User32.AnimateWindow(this.Handle, 450, User32.AnimateWindowFlags.AW_SLIDE | User32.AnimateWindowFlags.AW_VER_NEGATIVE);
             
             //used to fix issue with richtextbox not displaying after animation
@@ -98,6 +99,10 @@ namespace AlertToast {
 
         private void timer1_Tick(object sender, EventArgs e) {
             this.Close();
+        }
+
+        private void bodytext_LinkClicked(object sender, LinkClickedEventArgs e) {
+            System.Diagnostics.Process.Start(e.LinkText);
         }
     }
 }

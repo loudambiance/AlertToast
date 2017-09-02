@@ -78,6 +78,7 @@
             this.bodytext.TabIndex = 2;
             this.bodytext.Text = "";
             this.bodytext.ContentsResized += new System.Windows.Forms.ContentsResizedEventHandler(this.bodytext_ContentsResized);
+            this.bodytext.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.bodytext_LinkClicked);
             // 
             // close_label
             // 
