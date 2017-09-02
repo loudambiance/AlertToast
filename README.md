@@ -16,4 +16,5 @@ here are the example themes included in the AlertExample project:
 * Rich Text
   * The body of the message is displayed using a rich text control.
   * Future plans are to add an HTML version as well.
-
+* Autosize
+  * The height of the alert autosizes/grows to match the content. The width is fixed at this time, and may change eventually to allow it to be dynamically set, but not autosize.
