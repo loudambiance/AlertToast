@@ -24,7 +24,7 @@ namespace AlertToast {
         /// <returns></returns>
         public static Alert createAlert(String header, String body, AlertTheme theme, bool rtf = false, int timer = 0) {
             Point tmp = getOffset();
-            Alert newAlert = new Alert(header, body, theme, rtf, tmp.X, tmp.Y,2000);
+            Alert newAlert = new Alert(header, body, theme, rtf, tmp.X, tmp.Y,timer);
             ActiveAlerts.Add(newAlert);
             newAlert.Show();
             return newAlert;
