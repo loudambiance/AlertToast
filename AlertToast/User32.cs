@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 namespace AlertToast {
-    class User32 {
+    public class User32 {
         //Constants
         public sealed class AnimateWindowFlags {
             public const int AW_HOR_POSITIVE = 0x00000001;
@@ -18,5 +18,8 @@ namespace AlertToast {
 
         [DllImport("user32")]
         public static extern bool AnimateWindow(IntPtr hwnd, int time, int flags);
+            
+        [DllImport("user32")]
+        public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
     }
 }

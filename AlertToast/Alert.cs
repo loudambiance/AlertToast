@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace AlertToast {
@@ -30,7 +32,7 @@ namespace AlertToast {
             } else {
                 this.bodytext.Text = body;
             }
-            this.bodytext.BackColor = this.gtheme.BodyBGColor;
+            //this.bodytext.BackColor = this.gtheme.BodyBGColor;
             this.titletext.ForeColor = this.gtheme.HeaderTextColor;
             this.titletext.Font = this.gtheme.HeaderFont;
             this.close_label.ForeColor = this.gtheme.HeaderTextColor;
@@ -42,21 +44,66 @@ namespace AlertToast {
                 this.timer1.Enabled = true;
                 this.timer1.Start();
             }
+            this.Location = calculateLocation();
         }
 
+        /*private void tableLayoutPanel1_CellPaint(object sender, TableLayoutCellPaintEventArgs e) {
+            if ((e.Row) % 2 == 0) {
+                if (this.gtheme.HeaderBG.GetType() == typeof(LinearGradientBrush)) {
+                    LinearGradientBrush tmp = ((LinearGradientBrush)this.gtheme.HeaderBG);
+                    float modifier = e.CellBounds.Height / tmp.Rectangle.Height;
+                    tmp.ScaleTransform(1.0f, modifier, MatrixOrder.Prepend);
+                    e.Graphics.FillRectangle(tmp, e.CellBounds);
+                } else { 
+                    e.Graphics.FillRectangle(this.gtheme.HeaderBG, e.CellBounds);
+                }
+            } else {
+                if (this.gtheme.BodyBG.GetType() == typeof(LinearGradientBrush)) {
+                    LinearGradientBrush tmp = ((LinearGradientBrush)this.gtheme.BodyBG);
+                    float modifier = e.CellBounds.Height / tmp.Rectangle.Height;
+                    Matrix A = tmp.Transform;
+                    tmp.ScaleTransform(1.0f, modifier, MatrixOrder.Append);
+                   Matrix B  = tmp.Transform;
+                    
+                    e.Graphics.FillRectangle(tmp, e.CellBounds);
+                } else {
+                    e.Graphics.FillRectangle(this.gtheme.BodyBG, e.CellBounds);
+                }
+            }
+        }*/
+
+
         private void tableLayoutPanel1_CellPaint(object sender, TableLayoutCellPaintEventArgs e) {
-            if ((e.Row) % 2 == 0)
-                e.Graphics.FillRectangle(new SolidBrush(this.gtheme.HeaderBGColor), e.CellBounds);
-            else
-                e.Graphics.FillRectangle(new SolidBrush(this.gtheme.BodyBGColor), e.CellBounds);
+            if ((e.Row) % 2 == 0) {
+                e.Graphics.FillRectangle(new SolidBrush(this.gtheme.HeaderBG), e.CellBounds);
+            } else {
+               e.Graphics.FillRectangle(new SolidBrush(this.gtheme.BodyBG), e.CellBounds);
+            }
         }
 
         private void bodytext_ContentsResized(object sender, ContentsResizedEventArgs e) {
             this.bodytext.Height = e.NewRectangle.Height+5;
+            tableLayoutPanel1.Invalidate();
         }
 
         private void close_label_Click(object sender, EventArgs e) {
             this.Close();
+        }
+
+        public Point updatePosition(Point point) {
+            Point ret;
+
+            int bottom = Screen.PrimaryScreen.WorkingArea.Bottom;
+            int right = Screen.PrimaryScreen.WorkingArea.Right;
+
+            if ((point.Y - this.Height - 10) > 0) {
+                ret = new Point(point.X, point.Y - this.Height - 10);
+            } else {
+                ret = new Point(point.X - this.Width - 10, bottom - this.Height - 10);
+            }
+            User32.MoveWindow(this.Handle, ret.X, ret.Y, this.Width, this.Height, true);
+            //this.Location = ret; 
+            return ret;
         }
 
         /// <summary>
@@ -64,14 +111,15 @@ namespace AlertToast {
         /// </summary>
         /// <returns>Point object to be Top/Left location of form</returns>
         private Point calculateLocation() {
+
             Point ret;
 
             int bottom = Screen.PrimaryScreen.WorkingArea.Bottom;
             int right = Screen.PrimaryScreen.WorkingArea.Right;
-            
-            if (xoffset == right) {
-                ret = new Point(xoffset - this.Width - 10, bottom - this.Height - 10);
-            } else if ((yoffset - this.Height - 10) > 0) {
+
+            if (xoffset == right || (xoffset == 0 && yoffset == 0)) {
+                ret = new Point(right - this.Width - 10, bottom - this.Height - 10);
+            }else if ((yoffset - this.Height - 10) > 0) {
                 ret = new Point(xoffset, yoffset - this.Height - 10);
             } else {
                 ret = new Point(xoffset - this.Width - 10, bottom - this.Height - 10);
@@ -82,15 +130,31 @@ namespace AlertToast {
         
         //todo: Add options for other animations, and make animations optional
         protected override void OnLoad(System.EventArgs e) {
-
             this.Location = calculateLocation();
             this.TopMost = true;
-            User32.AnimateWindow(this.Handle, 450, User32.AnimateWindowFlags.AW_SLIDE | User32.AnimateWindowFlags.AW_VER_NEGATIVE);
-            
+            if(this.gtheme.animationIn == User32.AnimateWindowFlags.AW_SLIDE) {
+                User32.AnimateWindow(this.Handle, this.gtheme.animationlenIn, this.gtheme.animationIn | this.gtheme.directionIn);
+            }else {
+                User32.AnimateWindow(this.Handle, this.gtheme.animationlenIn, this.gtheme.animationIn);
+            }
+
+
             //used to fix issue with richtextbox not displaying after animation
             //todo: find better solution
-            this.bodytext.Refresh(); 
+            this.tableLayoutPanel1.Refresh();
+            this.Text = this.Text + " X: " + this.Location.X + "; Y: " + this.Location.Y; 
             base.OnLoad(e);
+            
+        }
+
+        protected override void OnClosing(CancelEventArgs e) {
+            if (this.gtheme.animationOut == User32.AnimateWindowFlags.AW_SLIDE) {
+                User32.AnimateWindow(this.Handle, this.gtheme.animationlenOut, this.gtheme.animationOut | this.gtheme.directionOut | User32.AnimateWindowFlags.AW_HIDE);
+            } else {
+                User32.AnimateWindow(this.Handle, this.gtheme.animationlenOut, this.gtheme.animationOut | User32.AnimateWindowFlags.AW_HIDE);
+            }
+
+            base.OnClosing(e);
         }
 
         private void Alert_FormClosed(object sender, FormClosedEventArgs e) {
@@ -104,5 +168,7 @@ namespace AlertToast {
         private void bodytext_LinkClicked(object sender, LinkClickedEventArgs e) {
             System.Diagnostics.Process.Start(e.LinkText);
         }
+
+
     }
 }

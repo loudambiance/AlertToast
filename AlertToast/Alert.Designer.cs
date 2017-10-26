@@ -26,9 +26,9 @@
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.titletext = new System.Windows.Forms.Label();
-            this.bodytext = new System.Windows.Forms.RichTextBox();
             this.close_label = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.bodytext = new AlertToast.TransAlertRTB();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,21 +65,6 @@
             this.titletext.TabIndex = 0;
             this.titletext.Text = "titletext";
             // 
-            // bodytext
-            // 
-            this.bodytext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.bodytext.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.bodytext.Location = new System.Drawing.Point(23, 23);
-            this.bodytext.Name = "bodytext";
-            this.bodytext.ReadOnly = true;
-            this.bodytext.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.bodytext.Size = new System.Drawing.Size(304, 44);
-            this.bodytext.TabIndex = 2;
-            this.bodytext.Text = "";
-            this.bodytext.ContentsResized += new System.Windows.Forms.ContentsResizedEventHandler(this.bodytext_ContentsResized);
-            this.bodytext.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.bodytext_LinkClicked);
-            // 
             // close_label
             // 
             this.close_label.AutoSize = true;
@@ -96,6 +81,21 @@
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // bodytext
+            // 
+            this.bodytext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.bodytext.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.bodytext.Location = new System.Drawing.Point(23, 23);
+            this.bodytext.Name = "bodytext";
+            this.bodytext.ReadOnly = true;
+            this.bodytext.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.bodytext.Size = new System.Drawing.Size(304, 44);
+            this.bodytext.TabIndex = 2;
+            this.bodytext.Text = "";
+            this.bodytext.ContentsResized += new System.Windows.Forms.ContentsResizedEventHandler(this.bodytext_ContentsResized);
+            this.bodytext.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.bodytext_LinkClicked);
             // 
             // Alert
             // 
@@ -122,8 +122,8 @@
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label titletext;
-        private System.Windows.Forms.RichTextBox bodytext;
         private System.Windows.Forms.Label close_label;
         private System.Windows.Forms.Timer timer1;
+        private TransAlertRTB bodytext;
     }
 }

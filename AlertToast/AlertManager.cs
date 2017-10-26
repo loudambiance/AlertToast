@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace AlertToast {
     /// <summary>
@@ -23,9 +24,15 @@ namespace AlertToast {
         /// <param name="timer">int length of time in milliseconds to display form. 0 disables timer.</param>
         /// <returns></returns>
         public static Alert createAlert(String header, String body, AlertTheme theme, bool rtf = false, int timer = 0) {
-            Point tmp = getOffset();
+            //Point tmp = getOffset();
+            Point tmp = new Point(0, 0);
             Alert newAlert = new Alert(header, body, theme, rtf, tmp.X, tmp.Y,timer);
-            ActiveAlerts.Add(newAlert);
+            //ActiveAlerts.Add(newAlert);
+            tmp = newAlert.Location;
+            foreach(Alert alert in ActiveAlerts) {
+                tmp = alert.updatePosition(tmp);
+            }
+            ActiveAlerts.Insert(0,newAlert);
             newAlert.Show();
             return newAlert;
         }
@@ -35,7 +42,20 @@ namespace AlertToast {
         /// </summary>
         /// <param name="alert">Alert object to remove</param>
         public static void removeAlert(Alert alert) {
+            int index = ActiveAlerts.IndexOf(alert);
+            Point pos;
+            if (index != 0) {
+                int tmpindex = index - 1;
+                pos = ActiveAlerts[tmpindex].Location;
+            }else {
+                int bottom = Screen.PrimaryScreen.WorkingArea.Bottom;
+                int right = Screen.PrimaryScreen.WorkingArea.Right - alert.Width - 10;
+                pos = new Point(right, bottom);
+            }
             ActiveAlerts.Remove(alert);
+            foreach(Alert curAlert in ActiveAlerts.Skip(index)) {
+                pos = curAlert.updatePosition(pos);
+            }
         }
 
         /// <summary>

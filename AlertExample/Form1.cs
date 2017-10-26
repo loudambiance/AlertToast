@@ -1,6 +1,7 @@
 ﻿using AlertToast;
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace AlertExample {
@@ -17,21 +18,23 @@ namespace AlertExample {
         }
 
         private void initthemes() {
+
             this.red = new AlertTheme(Color.FromArgb(169, 68, 66), Color.FromArgb(255, 255, 255),
                 Color.FromArgb(235, 204, 204),Color.FromArgb(169, 68, 66), new Font("Arial", 10),
                 new Font("Arial", 12, FontStyle.Bold));
             this.yellow = new AlertTheme(Color.FromArgb(138, 109, 59), Color.FromArgb(255, 255, 255),
                 Color.FromArgb(250, 242, 204), Color.FromArgb(138, 109, 59), new Font("Arial", 10),
-                new Font("Arial", 12, FontStyle.Bold));
+                new Font("Arial", 12, FontStyle.Bold),450, User32.AnimateWindowFlags.AW_BLEND);
             this.orange = new AlertTheme(Color.FromArgb(255, 136, 0), Color.FromArgb(255, 255, 255),
                 Color.FromArgb(255, 187, 51), Color.FromArgb(255, 136, 0), new Font("Arial", 10),
                 new Font("Arial", 12, FontStyle.Bold));
             this.green = new AlertTheme(Color.FromArgb(60, 118, 61), Color.FromArgb(255, 255, 255),
-                Color.FromArgb(208, 233, 198), Color.FromArgb(60, 118, 61), new Font("Arial", 10),
+                 Color.FromArgb(208, 233, 198), Color.FromArgb(60, 118, 61), new Font("Arial", 10),
+                new Font("Arial", 12, FontStyle.Bold),450,User32.AnimateWindowFlags.AW_SLIDE,User32.AnimateWindowFlags.AW_VER_NEGATIVE, 450, User32.AnimateWindowFlags.AW_SLIDE, User32.AnimateWindowFlags.AW_VER_NEGATIVE);
+            this.blue = new AlertTheme(Color.FromArgb(49, 112, 143),Color.FromArgb(255, 255, 255),
+                 Color.FromArgb(188, 223, 241), Color.FromArgb(49, 112, 143), new Font("Arial", 10),
                 new Font("Arial", 12, FontStyle.Bold));
-            this.blue = new AlertTheme(Color.FromArgb(49, 112, 143), Color.FromArgb(255, 255, 255),
-                Color.FromArgb(188, 223, 241), Color.FromArgb(49, 112, 143), new Font("Arial", 10),
-                new Font("Arial", 12, FontStyle.Bold));
+            int k = User32.AnimateWindowFlags.AW_BLEND;
         }
 
         private void button1_Click(object sender, EventArgs e) {

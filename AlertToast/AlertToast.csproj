@@ -50,6 +50,12 @@
     <Compile Include="AlertManager.cs" />
     <Compile Include="AlertTheme.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransAlertRTB.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TransAlertRTB.Designer.cs">
+      <DependentUpon>TransAlertRTB.cs</DependentUpon>
+    </Compile>
     <Compile Include="User32.cs" />
   </ItemGroup>
   <ItemGroup>
